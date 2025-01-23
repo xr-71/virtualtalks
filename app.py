@@ -1,5 +1,4 @@
-# app.py
-from flask import Flask, render_template, request, session
+from flask import Flask, render_template, request, session, redirect
 from flask_socketio import SocketIO, emit, join_room, leave_room
 from datetime import datetime
 import secrets
