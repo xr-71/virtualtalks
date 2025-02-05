@@ -1,0 +1,124 @@
+<!-- templates/chat.html -->
+<!DOCTYPE html>
+<html>
+<head>
+    <title>{{ room }} Chat Room</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', path='styles.css') }}">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+<body>
+    <div class="mobile-header">
+        <button class="toggle-sidebar" onclick="toggleSidebar()">
+            <i class="fas fa-bars"></i>
+        </button>
+        <h2>{{ room }} Room</h2>
+    </div>
+
+    <div class="chat-container">
+        <div class="chat-sidebar" id="sidebar">
+            <div class="sidebar-header">
+                <div class="user-box">
+                    <span class="username">{{ username }}</span>
+                </div>
+                <button class="close-sidebar" onclick="toggleSidebar()">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="users-toggle">
+                <button onclick="toggleUserList()">
+                    <i class="fas fa-users"></i> Users
+                    <i class="fas fa-chevron-down"></i>
+                </button>
+            </div>
+            <div class="users-list active" id="usersList">
+                <!-- Users will be populated here -->
+            </div>
+            <a href="/" class="back-button">Leave Room</a>
+        </div>
+        
+        <div class="chat-main">
+            <div class="messages" id="messages"></div>
+            <div class="input-area">
+                <input type="text" id="messageInput" placeholder="Type your message...">
+                <button onclick="sendMessage()">
+                    <i class="fas fa-paper-plane"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const username = "{{ username }}";
+        const room = "{{ room }}";
+        const ws = new WebSocket(`ws://${window.location.host}/ws/${room}/${username}`);
+        
+        function toggleSidebar() {
+            document.getElementById('sidebar').classList.toggle('active');
+            document.body.classList.toggle('sidebar-open');
+        }
+
+        ws.onmessage = function(event) {
+            try {
+                const data = JSON.parse(event.data);
+                if (data.type === "users_update") {
+                    updateUsersList(data.users);
+                    return;
+                }
+            } catch (e) {
+                const messages = document.getElementById('messages');
+                const message = document.createElement('div');
+                message.textContent = event.data;
+                message.className = 'message';
+                messages.appendChild(message);
+                messages.scrollTop = messages.scrollHeight;
+            }
+        };
+
+        function updateUsersList(users) {
+            const usersList = document.getElementById('usersList');
+            usersList.innerHTML = '';
+            users.forEach(user => {
+                const userElement = document.createElement('div');
+                userElement.className = 'user-item';
+                userElement.innerHTML = `
+                    <i class="fas fa-circle user-status"></i>
+                    <span>${user}</span>
+                `;
+                usersList.appendChild(userElement);
+            });
+        }
+
+        function toggleUserList() {
+            const usersList = document.getElementById('usersList');
+            usersList.classList.toggle('active');
+            const button = document.querySelector('.users-toggle button');
+            button.classList.toggle('active');
+        }
+
+        function sendMessage() {
+            const input = document.getElementById('messageInput');
+            const message = input.value;
+            if (message) {
+                ws.send(message);
+                input.value = '';
+            }
+        }
+
+        document.getElementById('messageInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                sendMessage();
+            }
+        });
+
+        // Close sidebar when clicking outside on mobile
+        document.addEventListener('click', function(e) {
+            if (document.body.classList.contains('sidebar-open') &&
+                !e.target.closest('.chat-sidebar') &&
+                !e.target.closest('.toggle-sidebar')) {
+                toggleSidebar();
+            }
+        });
+    </script>
+</body>
+</html>
