@@ -1,5 +1,6 @@
 fastapi
 uvicorn
+jinja2
 sqlalchemy
 pandas
 psycopg2-binary
