@@ -1,0 +1,237 @@
+/* static/styles.css */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f0f2f5;
+    height: 100vh;
+    overflow: hidden;
+}
+
+.mobile-header {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    background: #ffffff;
+    padding: 15px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    z-index: 100;
+    text-align: center;
+}
+
+.toggle-sidebar {
+    position: absolute;
+    left: 15px;
+    background: none;
+    border: none;
+    font-size: 20px;
+    cursor: pointer;
+    color: #0084ff;
+}
+
+.chat-container {
+    display: flex;
+    height: 100vh;
+    max-width: 1400px;
+    margin: 0 auto;
+    position: relative;
+}
+
+.chat-sidebar {
+    width: 280px;
+    background: #f8f9fa;
+    border-right: 1px solid #ddd;
+    display: flex;
+    flex-direction: column;
+    padding: 20px;
+    height: 100%;
+}
+
+.close-sidebar {
+    display: none;
+}
+
+.sidebar-header {
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.user-box {
+    background: #ffffff;
+    border: 2px solid #0084ff;
+    padding: 12px;
+    border-radius: 8px;
+    text-align: center;
+    flex-grow: 1;
+}
+
+.username {
+    font-weight: bold;
+    color: #0084ff;
+    font-size: 16px;
+}
+
+.users-toggle button {
+    width: 100%;
+    padding: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: #ffffff;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 15px;
+}
+
+.users-list {
+    background: #ffffff;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    margin: 10px 0;
+    max-height: calc(100vh - 300px);
+    overflow-y: auto;
+}
+
+.user-item {
+    padding: 12px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    border-bottom: 1px solid #eee;
+}
+
+.user-status {
+    font-size: 8px;
+    color: #28a745;
+}
+
+.chat-main {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    background: #ffffff;
+    height: 100%;
+}
+
+.messages {
+    flex-grow: 1;
+    padding: 20px;
+    overflow-y: auto;
+}
+
+.message {
+    background: #f0f2f5;
+    padding: 12px;
+    border-radius: 15px;
+    margin-bottom: 10px;
+    max-width: 80%;
+    word-wrap: break-word;
+}
+
+.input-area {
+    padding: 15px;
+    border-top: 1px solid #ddd;
+    display: flex;
+    gap: 10px;
+    background: #ffffff;
+}
+
+.input-area input {
+    flex-grow: 1;
+    padding: 12px;
+    border: 1px solid #ddd;
+    border-radius: 20px;
+    font-size: 15px;
+}
+
+.input-area button {
+    padding: 12px 20px;
+    background: #0084ff;
+    color: white;
+    border: none;
+    border-radius: 20px;
+    cursor: pointer;
+}
+
+.back-button {
+    margin-top: auto;
+    text-align: center;
+    padding: 12px;
+    background: #f0f2f5;
+    color: #1a1a1a;
+    text-decoration: none;
+    border-radius: 8px;
+    transition: background-color 0.3s;
+}
+
+/* Mobile Styles */
+@media (max-width: 768px) {
+    .mobile-header {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .chat-container {
+        margin-top: 60px;
+        height: calc(100vh - 60px);
+    }
+
+    .chat-sidebar {
+        position: fixed;
+        left: -280px;
+        top: 60px;
+        bottom: 0;
+        z-index: 1000;
+        transition: left 0.3s ease;
+        background: #ffffff;
+        box-shadow: 2px 0 5px rgba(0,0,0,0.1);
+    }
+
+    .chat-sidebar.active {
+        left: 0;
+    }
+
+    .close-sidebar {
+        display: block;
+        background: none;
+        border: none;
+        font-size: 20px;
+        color: #666;
+        padding: 5px;
+        cursor: pointer;
+    }
+
+    .sidebar-open .chat-main {
+        opacity: 0.7;
+        pointer-events: none;
+    }
+
+    .input-area {
+        padding: 10px;
+    }
+
+    .input-area input {
+        font-size: 16px; /* Prevents zoom on iOS */
+    }
+
+    .message {
+        max-width: 90%;
+    }
+}
+
+/* Tablet Styles */
+@media (min-width: 769px) and (max-width: 1024px) {
+    .chat-sidebar {
+        width: 240px;
+    }
+}
